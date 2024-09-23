@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import Sidebar from './SellerSidebar';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 function UpdateProduct(props) {
     const { product_id } = useParams()
@@ -20,10 +20,17 @@ function UpdateProduct(props) {
         'usd_price': '',
         'tags': '',
         'demo_url': '',
+        'image': '',
+        'product_imgs': ''
     });
     const [imgUploadErrorMsg, setImgUploadErrorMsg] = useState('')
     const [imgUploadSuccessMsg, setImgUploadSuccessMsg] = useState('')
-    const [productImgs, setProductImgs] = useState([])
+    const [productImgs, setProductImgs] = useState([]);
+    const [productImgsData, setProductImgsData] = useState([]);
+    const [isFeatureImageSelected, setIsFeatureImageSelected] = useState(false)
+    const [isProductFileSelected, setIsProductFileSelected] = useState(false)
+    const [isMultipleProductImages, setIsMultipleProductImages] = useState(false)
+    const [isImageDeleted, setIsImageDeleted] = useState(false)
 
     useEffect(() => {
         fetchData(baseUrl + '/categories/')
@@ -36,6 +43,19 @@ function UpdateProduct(props) {
             .then((data) => {
                 setCategoryData(data.results)
             })
+    }
+
+    function deleteImage(image_id) {
+        axios.delete(baseUrl + '/product-img/' + image_id)
+        .then(function(response){
+            if(response.status == 204)
+            {
+                window.location.reload()
+            }
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
     }
 
     function fetchProductData(baseUrl) {
@@ -53,6 +73,7 @@ function UpdateProduct(props) {
                     'image': data.image,
                     'demo_url': data.demo_url,
                     'product_file': data.product_file,
+                    'product_imgs': data.product_imgs
                 })
             })
     }
@@ -69,53 +90,53 @@ function UpdateProduct(props) {
         formData.append('tags', productData.tags);
         formData.append('demo_url', productData.demo_url);
         formData.append('detail', productData.detail);
-    
+        if (isFeatureImageSelected) {
+            formData.append('image', productData.image);
+        }
+        if (isProductFileSelected) {
+            formData.append('product_file', productData.product_file);
+        }
+
         // Submit Data
         axios.patch(baseUrl + '/product/' + product_id + '/', formData, {
             headers: {
                 'content-type': 'multipart/form-data'
             }
         })
-        .then(function (response) {
-            if (response.status === 201) {
-                setProductData({
-                    'category': '',
-                    'vendor': vendor_id,
-                    'title': '',
-                    'slug': '',
-                    'detail': '',
-                    'price': '',
-                    'usd_price': '',
-                    'tags': '',
-                    'demo_url': '',
-                });
-                setErrorMsg('');
-                setSuccessMsg(response.statusText);
-    
-                // submit images
-                for (let i = 0; i < productImgs.length; i++) {
-                    const ImageFormData = new FormData();
-                    ImageFormData.append('product', response.data.id); // Assuming response.data.id is the product PK
-                    ImageFormData.append('image', productImgs[i]);
-    
-                    axios.post(baseUrl + '/product-imgs/', ImageFormData)
-                    .then(function (response) {
-                        console.log(response);
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
+            .then(function (response) {
+                if (response.status === 200) {
+                    setErrorMsg('');
+                    setSuccessMsg(response.statusText);
+
+                    if (isMultipleProductImages) {
+
+                        // submit images
+                        for (let i = 0; i < productImgs.length; i++) {
+                            const ImageFormData = new FormData();
+                            ImageFormData.append('product', response.data.id); // Assuming response.data.id is the product PK
+                            ImageFormData.append('image', productImgs[i]);
+
+                            axios.post(baseUrl + '/product-imgs/?from_update=1', ImageFormData)
+                            .then(function (response) {
+                                console.log(response);
+                                window.location.reload()
+                                })
+                                .catch(function (error) {
+                                    console.log(error);
+                                });
+                        }
+                    }
+                } else {
+                    setErrorMsg(response.statusText);
+                    setSuccessMsg('');
                 }
-            } else {
-                setErrorMsg(response.statusText);
-                setSuccessMsg('');
-            }
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+
     };
-    
+
 
     const inputHandler = (event) => {
         setProductData({
@@ -130,16 +151,24 @@ function UpdateProduct(props) {
             ...productData,
             [event.target.name]: event.target.files[0]
         })
+
+        if (event.target.name == 'image') {
+            setIsFeatureImageSelected(true)
+        }
+        if (event.target.name == 'product_file') {
+            setIsProductFileSelected(true)
+        }
     }
 
     const multipleFilesHandler = (event) => {
         var files = event.target.files;
         if (files.length > 0) {
+            setIsMultipleProductImages(true)
             setProductImgs(files)
         }
     }
 
-    // console.log(categoryData)
+
 
     return (
         <div className='container mt-4'>
@@ -199,14 +228,24 @@ function UpdateProduct(props) {
                                 <div className="mb-3">
                                     <label for="ProductImg" className="form-label">Featured Images</label>
                                     <input type="file" name='image' onChange={fileHandler} className="form-control" id='ProductImg' />
+                                    <img src={productData.image} className='img rounded border mt-2' width={200} />
                                 </div>
                                 <div className="mb-3">
                                     <label for="Product_Imgs" className="form-label">Product Images</label>
-                                    <input type="file" name='product_imgs' multiple onChange={multipleFilesHandler} className="form-control" id='Product_Imgs' />
+                                    <input type="file" name='product_imgs' multiple onChange={multipleFilesHandler} className="form-control mb-3" id='Product_Imgs' />
+                                    {
+                                        productData.product_imgs && productData.product_imgs.map((img, val) =>
+                                            <span className='image-box d-inline p-3 mt-2' onClick={() => deleteImage(img.id)}>
+                                                <i className='fa fa-trash text-danger' style={styles.deleteBtn}  role='button'></i>
+                                                <img src={img.image} className='my-4' width={200} />
+                                            </span>
+                                        )
+                                    }
                                 </div>
                                 <div className="mb-3">
                                     <label for="Product_File" className="form-label">Product File</label>
                                     <input type="file" name='product_file' onChange={fileHandler} className="form-control" id='Product_File' />
+                                    {/* <Link download={true} to={productData.product_file}>{productData.product_file}</Link> */}
                                 </div>
                                 <button onClick={submitHandler} type="button" className="btn btn-primary">Submit</button>
                             </form>
@@ -216,6 +255,12 @@ function UpdateProduct(props) {
             </div>
         </div>
     )
+}
+
+const styles = {
+    'deleteBtn' : {
+        'position' : 'absolute',
+    }
 }
 
 export default UpdateProduct

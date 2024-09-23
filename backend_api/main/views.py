@@ -121,7 +121,21 @@ class ProductImgsList(generics.ListCreateAPIView):
     queryset = models.ProductImage.objects.all()
     serializer_class = serializers.ProductImageSerializer
     
+
+class ProductImgsDetail(generics.ListCreateAPIView):
+    queryset = models.ProductImage.objects.all()
+    serializer_class = serializers.ProductImageSerializer
     
+    def get_queryset(self):
+        qs = super().get_queryset()
+        product_id = self.kwargs['product_id']
+        qs = qs.filter(product__id = product_id)
+        return qs
+
+
+class ProductImgDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.ProductImage.objects.all()
+    serializer_class = serializers.ProductImageSerializer
 
 class TagProductList(generics.ListCreateAPIView):
     queryset = models.Product.objects.all()
