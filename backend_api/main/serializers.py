@@ -84,7 +84,7 @@ class CustomerDetailSerializer(serializers.ModelSerializer):
 #   Orders
 
 class OrderSerializer(serializers.ModelSerializer):
-    customer = serializers.PrimaryKeyRelatedField(queryset=models.Customer.objects.all())
+    # customer = serializers.PrimaryKeyRelatedField(queryset=models.Customer.objects.all())
 
     class Meta:
         model = models.Order
@@ -104,7 +104,11 @@ class OrderItemSerializer(serializers.ModelSerializer):
         model = models.OrderItems
         fields = ['id', 'order', 'product', 'qty', 'price', 'usd_price','order_details', 'product_details']
 
-
+    def to_representation(self,instance):
+        response = super().to_representation(instance)
+        response['customer'] = CustomerSerializer(instance.order.customer).data
+        response['user'] = UserSerializer(instance.order.customer.user).data
+        return response
 
 
 class OrderDetailSerializer(serializers.ModelSerializer):
