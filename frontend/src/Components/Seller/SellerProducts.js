@@ -20,7 +20,18 @@ function SellerProducts(props) {
             })
     }
 
-    console.log(productData)
+    function showConfirm(product_id) {
+        var _confirm = window.confirm('Are you sure to delete this product?')
+
+        if (_confirm) {
+            fetch(baseUrl + '/product/' + product_id + '/',{
+                method: 'DELETE'
+            })
+                .then((response) => {
+                    fetchData(baseUrl + '/products/')
+                })
+        }
+    }
 
     return (
         <div className='container mt-4'>
@@ -64,8 +75,13 @@ function SellerProducts(props) {
                                                     }
                                                 </td>
                                                 <td>
-                                                    <a href='#' className='btn btn-primary ms-1'>Edit</a>
-                                                    <a href='#' className='btn btn-danger ms-1'>Delete</a>
+                                                    <Link to={`/seller/update-product/${product.id}`} className='btn btn-primary ms-1'>Edit</Link>
+                                                    <Link
+                                                        onClick={() => showConfirm(product.id)}
+                                                        className='btn btn-danger ms-1'
+                                                    >
+                                                        Delete
+                                                    </Link>
                                                 </td>
                                             </tr>
                                         )
