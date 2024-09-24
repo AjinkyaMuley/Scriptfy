@@ -285,6 +285,18 @@ class CustomerOrderItemList(generics.ListAPIView):
         return qs
 
 
+
+class VendorOrderItemList(generics.ListAPIView):
+    queryset = models.OrderItems.objects.all()
+    serializer_class = serializers.OrderItemSerializer
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        vendor_id = self.kwargs['pk']
+        qs = qs.filter(product__vendor__id=vendor_id)
+        return qs
+
+
 class OrderDetail(generics.ListAPIView):
     # queryset = models.OrderItems.objects.all()
     serializer_class = serializers.OrderDetailSerializer
@@ -317,6 +329,11 @@ class CategoryList(generics.ListCreateAPIView):
 class CategoryDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.ProductCategory.objects.all()
     serializer_class = serializers.CategoryDetailSerializer
+
+
+class OrderModify(generics.RetrieveUpdateAPIView):
+    queryset = models.Order.objects.all()
+    serializer_class = serializers.OrderSerializer
 
 
 @csrf_exempt
