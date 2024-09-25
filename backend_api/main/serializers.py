@@ -14,7 +14,7 @@ class VendorSerializer(serializers.ModelSerializer):
 class VendorDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Vendor
-        fields = ['id','user','address']
+        fields = ['id','user','address','show_chart_daily_orders','show_chart_monthly_orders','show_chart_yearly_orders']
 
     def __init__(self,*args,**kwargs):
         super(VendorDetailSerializer,self).__init__(*args,**kwargs)

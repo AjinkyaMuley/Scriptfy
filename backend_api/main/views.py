@@ -8,6 +8,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
+from django.db.models import Count
 # Create your views here.
 
 class VendorList(generics.ListCreateAPIView):
@@ -305,6 +306,16 @@ class VendorCustomerList(generics.ListAPIView):
         qs = super().get_queryset()
         vendor_id = self.kwargs['pk']
         qs = qs.filter(product__vendor__id=vendor_id)
+        return qs
+
+class VendorProductList(generics.ListAPIView):
+    queryset = models.Product.objects.all()
+    serializer_class = serializers.ProductListSerializer
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        vendor_id = self.kwargs['pk']
+        qs = qs.filter(vendor__id=vendor_id)
         return qs
 
 

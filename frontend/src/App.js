@@ -46,6 +46,9 @@ import UpdateAddress from './Components/Customer/UpdateAddress';
 import SellerLogout from './Components/Seller/SellerLogout';
 import UpdateProduct from './Components/Seller/UpdateProduct';
 import CustomerOrders from './Components/Seller/CustomerOrders';
+import DailyReports from './Components/Seller/DailyReports';
+import MonthlyReports from './Components/Seller/MonthlyReports';
+import YearlyReports from './Components/Seller/YearlyReports';
 
 const checkCart = localStorage.getItem('cartData')
 const currentCurrency = localStorage.getItem('currency');
@@ -93,6 +96,9 @@ function App() {
           <Route path='/seller/update-product/:product_id' element={<UpdateProduct />} />
           <Route path='/seller/orders' element={<SellerOrders />} />
           <Route path='/seller/customers' element={<Customers />} />
+          <Route path='/seller/daily-reports' element={<DailyReports />} />
+          <Route path='/seller/monthly-reports' element={<MonthlyReports />} />
+          <Route path='/seller/yearly-reports' element={<YearlyReports />} />
           <Route path='/seller/customer/:customer_id/orderitems' element={<CustomerOrders />} />
           <Route path='/seller/reports' element={<Reports />} />
           <Route path='/seller/profile' element={<SellerProfile />} />

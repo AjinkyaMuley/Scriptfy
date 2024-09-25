@@ -1,5 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models import Count
+from django.db.models.functions import TruncDate
+import datetime
+
 
 # Create your models here.
 
@@ -12,6 +16,48 @@ class Vendor(models.Model):
     
     def __str__(self):
         return self.user.username
+    
+    # fetch daily orders
+    @property
+    def show_chart_daily_orders(self):
+        orders = OrderItems.objects.filter(product__vendor=self).values('order__order_time__date').annotate(count = Count('id'))
+        dateList = []
+        countList = []
+        if orders:
+            for order in orders:
+                dateList.append(order['order__order_time__date'])
+                countList.append(order['count'])
+
+        dataSet = {'dates':dateList,'data':countList}
+        return dataSet
+    
+    @property
+    def show_chart_monthly_orders(self):
+        orders = OrderItems.objects.filter(product__vendor=self).values('order__order_time__month').annotate(count = Count('id'))
+        dateList = []
+        countList = []
+        if orders:
+            for order in orders:
+                monthinteger = order['order__order_time__month']
+                month = datetime.date(1900,monthinteger,1).strftime('%B')
+                dateList.append(month)
+                countList.append(order['count'])
+
+        dataSet = {'dates':dateList,'data':countList}
+        return dataSet
+    
+    @property
+    def show_chart_yearly_orders(self):
+        orders = OrderItems.objects.filter(product__vendor=self).values('order__order_time__year').annotate(count = Count('id'))
+        dateList = []
+        countList = []
+        if orders:
+            for order in orders:
+                dateList.append(order['order__order_time__year'])
+                countList.append(order['count'])
+
+        dataSet = {'dates':dateList,'data':countList}
+        return dataSet
     
 #   Category
 class ProductCategory(models.Model):

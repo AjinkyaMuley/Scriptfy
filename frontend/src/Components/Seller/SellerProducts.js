@@ -6,10 +6,11 @@ import { useEffect, useState } from 'react';
 function SellerProducts(props) {
     const baseUrl = 'http://127.0.0.1:8000/api';
     const [productData, setProductData] = useState([])
+    const vendor_id = localStorage.getItem('vendor_id')
 
 
     useEffect(() => {
-        fetchData(baseUrl + '/products/')
+        fetchData(baseUrl + '/vendor/'+ vendor_id + '/products')
     }, [])
 
     function fetchData(baseUrl) {
