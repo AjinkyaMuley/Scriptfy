@@ -506,3 +506,18 @@ def deleteCustomerOrders(request, customer_id):
             }
 
     return JsonResponse(msg)
+
+
+@csrf_exempt
+def vendor_dashboard(request, pk):
+    vendor_id = pk
+    totalProducts = models.Product.objects.filter(vendor__id=vendor_id).count()
+    totalOrders = models.OrderItems.objects.filter(product__vendor__id=vendor_id).count()
+    totalCustomers = models.OrderItems.objects.filter(product__vendor__id=vendor_id).values('order__customer').count()
+
+    msg = {
+        'totalProducts': totalProducts,
+        'totalCustomers': totalCustomers,
+        'totalOrders': totalOrders,
+    }
+    return JsonResponse(msg)

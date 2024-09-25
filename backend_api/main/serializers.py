@@ -174,3 +174,5 @@ class WishListSerializer(serializers.ModelSerializer):
         response['customer'] = CustomerSerializer(instance.customer).data
         response['product'] = ProductDetailSerializer(instance.product).data
         return response
+
+
