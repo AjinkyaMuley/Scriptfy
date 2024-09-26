@@ -5,11 +5,16 @@ from django.contrib.auth.models import User
 class VendorSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Vendor
-        fields = ['id','user','address']
+        fields = ['id','user','address','profile_img']
 
     def __init__(self,*args,**kwargs):
         super(VendorSerializer,self).__init__(*args,**kwargs)
         # self.Meta.depth = 1
+
+    def to_representation(self,instance):
+        response = super().to_representation(instance)
+        response['user'] = UserSerializer(instance.user).data
+        return response
 
 class VendorDetailSerializer(serializers.ModelSerializer):
     class Meta:
