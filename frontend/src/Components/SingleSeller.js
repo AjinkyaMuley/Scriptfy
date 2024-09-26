@@ -10,12 +10,12 @@ function SingleSeller(props) {
     return (
         <div className='col-12 col-md-3 col-sm-4 mb-4'>
             <div className="card shadow" style={{ width: '18rem' }}>
-                <Link to={`/seller/${props.seller.id}`}>
+                <Link to={`/seller/${props.seller.user.username}/${props.seller.id}`}>
                     <img src={props.seller.profile_img} className="card-img-top" alt={props.seller.user.username} />
                 </Link>
                 <hr />
                 <div className="card-body">
-                    <h5 className="card-title"><Link to={`/seller/${props.seller.id}`}>{props.seller.user.username}</Link></h5>
+                    <h5 className="card-title"><Link to={`/seller/${props.seller.user.username}/${props.seller.id}`}>{props.seller.user.username}</Link></h5>
                 </div>
             </div>
         </div>

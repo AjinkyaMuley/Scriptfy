@@ -59,6 +59,13 @@ class Vendor(models.Model):
         dataSet = {'dates':dateList,'data':countList}
         return dataSet
     
+    @property
+    def total_products(self):
+        
+        product_count = Product.objects.filter(vendor=self).count()
+        dataSet = {'product_count':product_count}
+        return dataSet
+    
 #   Category
 class ProductCategory(models.Model):
     title = models.CharField(max_length=200)

@@ -51,6 +51,7 @@ import MonthlyReports from './Components/Seller/MonthlyReports';
 import YearlyReports from './Components/Seller/YearlyReports';
 import AddReview from './Components/Customer/AddReview';
 import AllSellers from './Components/AllSellers';
+import SellerDetail from './Components/Seller/SellerDetail';
 
 const checkCart = localStorage.getItem('cartData')
 const currentCurrency = localStorage.getItem('currency');
@@ -91,6 +92,7 @@ function App() {
           <Route path='/customer/update-address/:address_id' element={<UpdateAddress />} />
           {/* Seller Routes */}
           <Route path='/sellers' element={<AllSellers />} />
+          <Route path='/seller/:seller_username/:seller_id' element={<SellerDetail />} />
           <Route path='/seller/login' element={<SellerLogin />} />
           <Route path='/seller/logout' element={<SellerLogout />} />
           <Route path='/seller/register' element={<SellerRegister />} />
