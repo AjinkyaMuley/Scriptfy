@@ -141,7 +141,14 @@ class ProductRatingSerializer(serializers.ModelSerializer):
 
     def __init__(self,*args,**kwargs):
         super(ProductRatingSerializer,self).__init__(*args,**kwargs)
-        self.Meta.depth = 1
+        # self.Meta.depth = 1
+
+    
+    def to_representation(self,instance):
+        response = super().to_representation(instance)
+        response['customer'] = CustomerSerializer(instance.customer).data
+        return response
+
 
 
 class CategorySerializer(serializers.ModelSerializer):

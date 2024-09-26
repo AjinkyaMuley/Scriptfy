@@ -2,12 +2,18 @@ import { Link } from 'react-router-dom';
 import logo from '../logo.svg';
 import SingleProduct from './SingleProduct';
 import { useEffect, useState } from 'react';
+import Testimonials from './Testimonials';
 function Home() {
     const baseUrl = 'http://127.0.0.1:8000/api';
     const [Products, setProducts] = useState([])
+    const [reviewList, setReviewList] = useState([])
+
     useEffect(() => {
-        fetchData(baseUrl + '/products/?fetch_limit=4')
+        fetchData(baseUrl + '/products/?fetch_limit=4');
+        fetchTestimonialsData(baseUrl + '/productrating/')
     }, [])
+
+    console.log(reviewList)
 
     function fetchData(baseUrl) {
         fetch(baseUrl)
@@ -16,7 +22,17 @@ function Home() {
                 setProducts(data.results)
             })
     }
-    
+
+
+    function fetchTestimonialsData(baseUrl) {
+        fetch(baseUrl)
+            .then((response) => response.json())
+            .then((data) => {
+                setReviewList(data.results)
+            })
+    }
+
+
     return (
 
         <main className='mt-4'>
@@ -24,9 +40,9 @@ function Home() {
                 {/* Latest Products */}
                 <h3 className='mb-4'>Latest Products <Link to='/products' className='float-end btn btn-dark'>View All Products <i class="fa-solid fa-arrow-right-long "></i></Link></h3>
                 <div className='row mb-4'>
-                {
-                        Products.map((p) => <SingleProduct product={p}/>)
-                }
+                    {
+                        Products.map((p) => <SingleProduct product={p} />)
+                    }
                 </div>
                 {/* End Latest Products */}
 
@@ -234,53 +250,18 @@ function Home() {
 
 
                 {/* Rating and Reviews */}
-
-                <div id="carouselExampleIndicators" className="carousel slide my-4 border bg-dark text-white p-5" data-bs-ride="true">
+                <div id="carouselExampleIndicators" className="carousel slide my-4 border bg-dark text-white p-5" data-bs-ride="true" data-bs-wrap="true">
                     <div className="carousel-indicators">
-                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" className="active" aria-current="true" aria-label="Slide 1"></button>
-                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                        {
+                            reviewList.map((item, index) => { return <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to={`${index}`} className="active" aria-current="true" aria-label={`Slide ${index+1}`}></button> }
+                            )
+                        }
                     </div>
                     <div className="carousel-inner">
-                        <div className="carousel-item active">
-                            <figure className="text-center">
-                                <blockquote className="blockquote">
-                                    <p>A well-known quote, contained in a blockquote element.</p>
-                                </blockquote>
-                                <figcaption className="blockquote-footer">
-                                    <i className='fa fa-star text-warning'></i>
-                                    <i className='fa fa-star text-warning'></i>
-                                    <i className='fa fa-star text-warning'></i>
-                                    <cite title="Source Title">Customer Name</cite>
-                                </figcaption>
-                            </figure>
-                        </div>
-                        <div className="carousel-item">
-                            <figure className="text-center">
-                                <blockquote className="blockquote">
-                                    <p>A well-known quote, contained in a blockquote element.</p>
-                                </blockquote>
-                                <figcaption className="blockquote-footer">
-                                    <i className='fa fa-star text-warning'></i>
-                                    <i className='fa fa-star text-warning'></i>
-                                    <i className='fa fa-star text-warning'></i>
-                                    <i className='fa fa-star text-warning'></i>
-                                    <cite title="Source Title">Customer Name</cite>
-                                </figcaption>
-                            </figure>
-                        </div>
-                        <div className="carousel-item">
-                            <figure className="text-center">
-                                <blockquote className="blockquote">
-                                    <p>A well-known quote, contained in a blockquote element.</p>
-                                </blockquote>
-                                <figcaption className="blockquote-footer">
-                                    <i className='fa fa-star text-warning'></i>
-                                    <i className='fa fa-star text-warning'></i>
-                                    <cite title="Source Title">Customer Name</cite>
-                                </figcaption>
-                            </figure>
-                        </div>
+                        {
+                            reviewList.map((item, index) => { return <Testimonials item={item} index={index} /> }
+                            )
+                        }
                     </div>
                     <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
                         <span className="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -291,6 +272,7 @@ function Home() {
                         <span className="visually-hidden">Next</span>
                     </button>
                 </div>
+
 
                 {/* End */}
             </div>

@@ -52,7 +52,11 @@ function OrderRow(props) {
             <td>
                 {
                     item.order_details.order_status &&
-                    <button onClick={() => countDownloads(item.product_details.id)} className='btn btn-primary'>Download <span className='badge bg-white text-dark'>{totalDownloads}</span></button>
+                    <button onClick={() => countDownloads(item.product_details.id)} className='btn btn-primary btn-sm'>Download <span className='badge bg-white text-dark'>{totalDownloads}</span></button>
+                }
+                {
+                    item.order_details.order_status &&
+                    <Link to={`/customer/add-review/${item.product_details.id}`} className='btn btn-sm btn-success ms-2'>Add Review </Link>
                 }
             </td>
         </tr>

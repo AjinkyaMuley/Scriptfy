@@ -49,6 +49,7 @@ import CustomerOrders from './Components/Seller/CustomerOrders';
 import DailyReports from './Components/Seller/DailyReports';
 import MonthlyReports from './Components/Seller/MonthlyReports';
 import YearlyReports from './Components/Seller/YearlyReports';
+import AddReview from './Components/Customer/AddReview';
 
 const checkCart = localStorage.getItem('cartData')
 const currentCurrency = localStorage.getItem('currency');
@@ -79,6 +80,7 @@ function App() {
           <Route path='/customer/login' element={<Login />} />
           <Route path='/customer/logout' element={<Logout />} />
           <Route path='/customer/dashboard' element={<Dashboard />} />
+          <Route path='/customer/add-review/:product_id' element={<AddReview />} />
           <Route path='/customer/orders' element={<Orders />} />
           <Route path='/customer/wishlist' element={<Wishlist />} />
           <Route path='/customer/profile' element={<Profile />} />
