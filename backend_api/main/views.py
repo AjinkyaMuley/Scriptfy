@@ -9,6 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.db.models import Count
+from django.contrib.auth.hashers import make_password
 # Create your views here.
 
 class VendorList(generics.ListCreateAPIView):
@@ -73,6 +74,18 @@ def vendor_register(request):
 
     return JsonResponse(msg)
 
+
+@csrf_exempt
+def vendor_change_password(request,vendor_id):
+    password = request.POST.get('password')
+    vendor = models.Vendor.objects.get(id=vendor_id)
+    user = vendor.user
+    user.password = make_password(password)
+    user.save()
+
+    msg = {'bool' : True , 'msg' : 'Password Updated'}
+    
+    return JsonResponse(msg)
 
 @csrf_exempt
 def vendor_login(request):
@@ -204,6 +217,20 @@ def customer_login(request):
             'msg' : 'Invalid username or password'
         }
 
+    return JsonResponse(msg)
+
+
+
+@csrf_exempt
+def customer_change_password(request,customer_id):
+    password = request.POST.get('password')
+    customer = models.Customer.objects.get(id=customer_id)
+    user = customer.user
+    user.password = make_password(password)
+    user.save()
+
+    msg = {'bool' : True , 'msg' : 'Password Updated'}
+    
     return JsonResponse(msg)
 
 @csrf_exempt
