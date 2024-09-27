@@ -1,22 +1,23 @@
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { useState } from "react";
-
+import { useContext, useState } from "react";
+import { CurrencyContext } from "../../Context";
 
 function OrderRow(props) {
+    const { currencyData } = useContext(CurrencyContext)
     const baseUrl = 'http://127.0.0.1:8000/api';
     const index = props.index;
     const item = props.item;
 
     const [totalDownloads, setTotalDownloads] = useState(item.product_details.downloads)
 
-    const countDownloads = (product_id) =>{
+    const countDownloads = (product_id) => {
         const formData = new FormData();
         formData.append('product_id', product_id);
 
         axios.post(baseUrl + '/update_product_download_count/' + product_id)
             .then(function (response) {
-                if(response.data.bool == true){
+                if (response.data.bool == true) {
                     setTotalDownloads(++item.product_details.downloads);
                     window.open(
                         item.product_details.product_file,
@@ -37,8 +38,14 @@ function OrderRow(props) {
                     <img src={item.product_details.image} className="img-thumbnail" width={'80'} alt="..." /> {item.product_details.title}
                 </Link>
             </td>
-            <td>Rs. {item.product_details.price}</td>
-            <td>
+            {
+                (currencyData === 'inr' || currencyData === undefined) &&
+                <td>Rs. {item.price}</td>
+            }
+            {
+                currencyData == 'usd' &&
+                <td>$ {item.usd_price}</td>
+            }            <td>
                 <span>
                     {
                         item.order_details.order_status &&

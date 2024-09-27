@@ -47,7 +47,6 @@ function Header() {
                                     }
                                     {userContext == 'true' &&
                                         <>
-                                            <li><hr className="dropdown-divider" /></li>
                                             <li><Link to="/customer/dashboard" className="dropdown-item">Dashboard</Link></li>
                                             <li><Link to="/customer/logout" className="dropdown-item">Logout</Link></li>
                                         </>

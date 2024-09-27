@@ -1,9 +1,12 @@
 import Sidebar from './SellerSidebar';
 import { Link } from 'react-router-dom';
 import logo from '../../logo.svg'
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { CurrencyContext } from '../../Context';
 
 function SellerOrders() {
+    const { currencyData } = useContext(CurrencyContext)
+
     const baseUrl = 'http://127.0.0.1:8000/api';
     const [orderItems, setOrderItems] = useState([])
     const vendor_id = localStorage.getItem('vendor_id')
@@ -29,9 +32,8 @@ function SellerOrders() {
             },
             body: JSON.stringify({ order_status: status })
         })
-            .then(function(response){
-                if(response.status == 200)
-                {
+            .then(function (response) {
+                if (response.status == 200) {
                     fetchData(baseUrl + '/vendor/' + vendor_id + '/orderitems/')
                 }
             })
@@ -69,7 +71,14 @@ function SellerOrders() {
                                                     </Link>
                                                     <p><Link to={'/'}>{item.product_details.title}</Link></p>
                                                 </td>
-                                                <td>Rs. {item.product_details.price}</td>
+                                                {
+                                                    (currencyData === 'inr' || currencyData === undefined) &&
+                                                    <td>Rs. {item.price}</td>
+                                                }
+                                                {
+                                                    currencyData == 'usd' &&
+                                                    <td>$ {item.usd_price}</td>
+                                                }
                                                 <td>
                                                     {
                                                         item.order_details.order_status &&
