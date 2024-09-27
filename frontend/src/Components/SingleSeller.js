@@ -8,7 +8,9 @@ function SingleSeller(props) {
     const imgStyle = {
         width : '100%',
         height : '15vw',
-        objectFit : 'contain'
+        objectFit : 'contain',
+        padding : '20px',
+        background : '#f9f9f9'
     }
 
 

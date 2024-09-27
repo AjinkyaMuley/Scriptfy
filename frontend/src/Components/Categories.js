@@ -34,6 +34,15 @@ function Categories() {
         links.push(<li class="page-item"><Link onClick={() => changeUrl(baseUrl + `/categories/?page=${i}`)} to={`/categories/?page=${i}`} class="page-link" href="#">{i}</Link></li>)
     }
 
+    const imgStyle = {
+        width : '100%',
+        height : '15vw',
+        objectFit : 'contain',
+        padding : '20px',
+        background : '#f9f9f9'
+    }
+
+
     return (
         <section className="container mt-4">
             {/* Categories */}
@@ -43,7 +52,7 @@ function Categories() {
                     categories.map((category) =>
                         <div className='col-12 col-md-3 mb-4'>
                             <div className="card shadow" style={{ width: '18rem' }}>
-                                <img src={logo} className="card-img-top" alt={category.title} />
+                                <img style={imgStyle} src={category.cat_img} className="card-img-top" alt={category.title} />
                                 <div className="card-body">
                                     <h4 className="card-title"><Link to={`/category/${category.title}/${category.id}`}>{category.title}</Link></h4>
                                 </div>

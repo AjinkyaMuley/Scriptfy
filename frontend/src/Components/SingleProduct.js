@@ -142,9 +142,11 @@ function SingleProduct(props) {
     }, [productData.id, cartData]); // Dependency array
 
     const imgStyle = {
-        width: '100%',
-        height: '15vw',
-        objectFit: 'contain'
+        width : '100%',
+        height : '15vw',
+        objectFit : 'contain',
+        padding : '20px',
+        background : '#f9f9f9'
     }
 
     return (

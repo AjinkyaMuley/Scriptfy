@@ -67,7 +67,9 @@ function Home() {
     const imgStyle = {
         width : '100%',
         height : '15vw',
-        objectFit : 'contain'
+        objectFit : 'contain',
+        padding : '20px',
+        background : '#f9f9f9'
     }
 
     return (
@@ -91,7 +93,7 @@ function Home() {
                         popularCategoryList.map((p) =>
                             <div className='col-12 col-md-3 mb-4'>
                                 <div className="card shadow" style={{ width: '18rem' }}>
-                                    <img src={logo} style={imgStyle} className="card-img-top" alt="..." />
+                                    <img src={p.cat_img} style={imgStyle} className="card-img-top" alt="..." />
                                     <div className="card-body">
                                         <h4 className="card-title"><Link to={`/category/${p.title}/${p.id}`}>{p.title}</Link></h4>
                                     </div>

@@ -164,7 +164,7 @@ class ProductRatingSerializer(serializers.ModelSerializer):
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ProductCategory
-        fields = ['id','title','detail','total_downloads']
+        fields = ['id','title','detail','total_downloads','cat_img']
 
     def __init__(self,*args,**kwargs):
         super(CategorySerializer,self).__init__(*args,**kwargs)
