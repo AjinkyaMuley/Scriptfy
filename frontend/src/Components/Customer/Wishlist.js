@@ -74,7 +74,7 @@ function Wishlist() {
                                                     <td>{index + 1}</td>
                                                     <td>
                                                         <Link to={'/'}>
-                                                            <img src={`${baseUrlForImage}${item.product.image}`} className="img-thumbnail" width={'80'} alt="..." /> Django
+                                                            <img src={`${baseUrlForImage}${item.product.image}`} className="img-thumbnail" width={'80'} alt="..." /> {item.product.title}
                                                         </Link>
                                                     </td>
                                                     {

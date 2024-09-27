@@ -48,7 +48,7 @@ function Categories() {
                                     <h4 className="card-title"><Link to={`/category/${category.title}/${category.id}`}>{category.title}</Link></h4>
                                 </div>
                                 <div className='card-footer'>
-                                    Product Downloads : 2356
+                                    Product Downloads : {category.total_downloads}
                                 </div>
                             </div>
                         </div>

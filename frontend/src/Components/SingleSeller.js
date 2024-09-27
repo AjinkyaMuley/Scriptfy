@@ -1,14 +1,22 @@
 import { Link } from 'react-router-dom';
 import logo from '../logo.svg';
-import { useContext } from 'react';
-import { CurrencyContext } from '../Context';
+import { useContext, useEffect, useState } from 'react';
+import axios from 'axios';import { UserContext, CartContext, CurrencyContext } from '../Context';
 
 function SingleSeller(props) {
+
+    const imgStyle = {
+        width : '100%',
+        height : '15vw',
+        objectFit : 'contain'
+    }
+
+
     return (
         <div className='col-12 col-md-3 col-sm-4 mb-4'>
             <div className="card shadow" style={{ width: '18rem' }}>
                 <Link to={`/seller/${props.seller.user.username}/${props.seller.id}`}>
-                    <img src={props.seller.profile_img} className="card-img-top" alt={props.seller.user.username} />
+                    <img src={props.seller.profile_img} style={imgStyle} className="card-img-top" alt={props.seller.user.username} />
                 </Link>
                 <hr />
                 <div className="card-body">
