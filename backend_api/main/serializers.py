@@ -59,6 +59,11 @@ class ProductDetailSerializer(serializers.ModelSerializer):
         super(ProductDetailSerializer,self).__init__(*args,**kwargs)
         # self.Meta.depth = 1
 
+    def to_representation(self,instance):
+        response = super().to_representation(instance)
+        response['vendor'] = CustomerSerializer(instance.vendor).data
+        return response
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User

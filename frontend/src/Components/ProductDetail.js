@@ -3,6 +3,12 @@ import { useContext, useEffect, useState } from 'react';
 import SingleRelatedProduct from './SingleRelatedProduct';
 import { UserContext, CartContext, CurrencyContext } from '../Context';
 import axios from 'axios';
+import OwlCarousel from 'react-owl-carousel';
+import 'owl.carousel/dist/assets/owl.carousel.css';
+import 'owl.carousel/dist/assets/owl.theme.default.css';
+import 'owl.carousel/dist/assets/owl.carousel.css';
+import 'owl.carousel/dist/assets/owl.theme.default.css';
+
 
 function ProductDetail() {
     const baseUrl = 'http://127.0.0.1:8000/api'
@@ -35,7 +41,7 @@ function ProductDetail() {
                 setProductTags(data.tags)
             })
     }
-    
+
     console.log(productData)
     function fetchRelatedData(baseUrl) {
         fetch(baseUrl)
@@ -146,7 +152,7 @@ function ProductDetail() {
         // Send the form data via POST
         axios.post(baseUrl + '/wishlist/', formData)
             .then(function (response) {
-                if(response.data.id){
+                if (response.data.id) {
                     setProductInWishlist(true)
                 }
             })
@@ -225,6 +231,11 @@ function ProductDetail() {
                     {
                         currencyData == 'usd' && <h5 className='card-title'>Price: ${productData.usd_price}</h5>
                     }
+                    {
+                        productData.vendor && <p>Developed By : <Link to={`/seller/${productData.vendor.user.username}/${productData.vendor.id}`}>{productData.vendor.user.first_name} {productData.vendor.user.last_name}</Link></p>
+                    }
+                    
+
                     <p className='mt-3'>
                         <Link title='Demo' to={`${productData.demo_url}`} target='_blank' className='btn btn-dark'>
                             <i className="fa-solid fa-cart-plus"></i> Demo
@@ -271,51 +282,24 @@ function ProductDetail() {
             </div>
 
             {/* Related Products */}
-            {relatedProducts.length > 0 &&
+            {relatedProducts.length > 0 ? (
                 <>
-                    <h3 className='mt-5 mb-3 text-center'>Related Products</h3>
-                    <div id="relatedProductsSlider" className="carousel carousel-dark slide mt-4" data-bs-ride="true">
-                        <div className="carousel-indicators">
-                            {
-                                relatedProducts.map((image, index) => {
-
-                                    if (index === 0) {
-                                        return <button type="button" data-bs-target="#relatedProductsSlider" data-bs-slide-to={index} className='active' aria-current='true' aria-label="Slide 1"></button>
-                                    }
-                                    else {
-                                        return <button type="button" data-bs-target="#relatedProductsSlider" data-bs-slide-to={index} aria-current='true' aria-label="Slide 1"></button>
-                                    }
-                                })
-                            }
-                        </div>
-                        <div className="carousel-inner">
-                            {
-                                relatedProducts.map((product, index) => {
-
-                                    if (index === 0) {
-                                        return <div className='carousel-item active'>
-                                            <SingleRelatedProduct product={product} />
-                                        </div>
-                                    }
-                                    else {
-                                        return <div className='carousel-item'>
-                                            <SingleRelatedProduct product={product} />
-                                        </div>
-                                    }
-                                })
-                            }
-                        </div>
-                        {/* <button className="carousel-control-prev" type="button" data-bs-target="#relatedProductsSlider" data-bs-slide="prev">
-                    <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span className="visually-hidden">Previous</span>
-                </button>
-                <button className="carousel-control-next" type="button" data-bs-target="#relatedProductsSlider" data-bs-slide="next">
-                    <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span className="visually-hidden">Next</span>
-                </button> */}
-                    </div>
+                <h4 className='text-center mb-4 m-4'>Related Products</h4>
+                    <OwlCarousel className='owl-theme' loop margin={10} nav dots items={5}>
+                        {relatedProducts.map((product, index) => (
+                            <div className='item' key={index}>
+                                <SingleRelatedProduct product={product} />
+                            </div>
+                        ))}
+                    </OwlCarousel>
                 </>
+            ) : (
+                <p>Loading products...</p>
+            )
             }
+
+
+
             {/* End Related Products */}
         </section>
     )
