@@ -16,6 +16,14 @@ class VendorList(generics.ListCreateAPIView):
     queryset = models.Vendor.objects.all()
     serializer_class = serializers.VendorSerializer
 
+    def get_queryset(self):
+        qs = super().get_queryset()
+        if 'fetch_limit' in self.request.GET:
+            limit = int(self.request.GET['fetch_limit'])
+            qs = qs.annotate(downloads=Count('product')).order_by('-downloads','-id')
+            qs = qs[:limit]
+        return qs
+
 
 class VendorDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Vendor.objects.all()
@@ -128,6 +136,12 @@ class ProductList(generics.ListCreateAPIView):
         if 'fetch_limit' in self.request.GET:
             limit = int(self.request.GET['fetch_limit'])
             qs = qs.order_by('-id')[:limit]
+
+        if 'popular' in self.request.GET:
+            limit = int(self.request.GET['popular'])
+            qs = qs.order_by('-downloads','-id')[:limit]
+            # qs = qs[:limit]
+
         return qs
 
 
@@ -385,6 +399,14 @@ class ProductRatingViewSets(viewsets.ModelViewSet):
 class CategoryList(generics.ListCreateAPIView):
     queryset = models.ProductCategory.objects.all()
     serializer_class = serializers.CategorySerializer
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        if 'popular' in self.request.GET:
+            limit = int(self.request.GET['popular'])
+            qs = qs.annotate(downloads=Count('category_products')).order_by('-downloads','-id')
+            qs = qs[:limit]
+        return qs
 
 
 class CategoryDetail(generics.RetrieveUpdateDestroyAPIView):

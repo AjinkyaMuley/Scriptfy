@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models import Count
+from django.db.models import Count,Sum
 from django.db.models.functions import TruncDate
 import datetime
 
@@ -16,6 +16,11 @@ class Vendor(models.Model):
     
     def __str__(self):
         return self.user.username
+    
+    @property
+    def categories(self):
+        cats = Product.objects.filter(vendor=self,category__isnull=False).values('category__title','category__id').order_by('category__title','category__id').distinct('category__title','category__id')
+        return cats
     
     # fetch daily orders
     @property
@@ -73,7 +78,18 @@ class ProductCategory(models.Model):
 
     def __str__(self):
         return self.title
-    
+
+    @property
+    def total_downloads(self):
+        totalDownloads = 0
+        products = Product.objects.filter(category=self)
+
+        for product in products:
+            if product.downloads:
+                totalDownloads += product.downloads
+
+        return totalDownloads
+
     class Meta:
         verbose_name_plural = 'Product Categories'
     
@@ -100,6 +116,7 @@ class Product(models.Model):
         if self.tags:  # Check if tags are not None
             return self.tags.split(',')
         return []  # Return an empty list if tags are None
+    
 
 #   Customer Model
 class Customer(models.Model):

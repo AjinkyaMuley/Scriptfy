@@ -3,14 +3,21 @@ import logo from '../logo.svg';
 import SingleProduct from './SingleProduct';
 import { useEffect, useState } from 'react';
 import Testimonials from './Testimonials';
+import SingleSeller from './SingleSeller';
 function Home() {
     const baseUrl = 'http://127.0.0.1:8000/api';
     const [Products, setProducts] = useState([])
     const [reviewList, setReviewList] = useState([])
+    const [vendorList, setVendorList] = useState([])
+    const [popularProducts, setPopularProducts] = useState([])
+    const [popularCategoryList, setPopularCategoryList] = useState([])
 
     useEffect(() => {
         fetchData(baseUrl + '/products/?fetch_limit=4');
         fetchTestimonialsData(baseUrl + '/productrating/')
+        fetchPopularVendors(baseUrl + '/vendors/?fetch_limit=4');
+        fetchPopularProducts(baseUrl + '/products/?popular=4');
+        fetchPopularCategories(baseUrl + '/categories/?popular=4');
     }, [])
 
     console.log(reviewList)
@@ -23,6 +30,30 @@ function Home() {
             })
     }
 
+
+    function fetchPopularVendors(baseUrl) {
+        fetch(baseUrl)
+            .then((response) => response.json())
+            .then((data) => {
+                setVendorList(data.results)
+            })
+    }
+
+    function fetchPopularProducts(baseUrl) {
+        fetch(baseUrl)
+            .then((response) => response.json())
+            .then((data) => {
+                setPopularProducts(data.results)
+            })
+    }
+
+    function fetchPopularCategories(baseUrl) {
+        fetch(baseUrl)
+            .then((response) => response.json())
+            .then((data) => {
+                setPopularCategoryList(data.results)
+            })
+    }
 
     function fetchTestimonialsData(baseUrl) {
         fetch(baseUrl)
@@ -50,201 +81,40 @@ function Home() {
                 <h3 className='mb-4'>Popular Categories <Link to={'/categories'} className='float-end btn btn-dark'>View All Categories <i class="fa-solid fa-arrow-right-long "></i></Link></h3>
                 <div className='row mb-4'>
                     {/* Category Box */}
-                    <div className='col-12 col-md-3 mb-4'>
-                        <div className="card shadow" style={{ width: '18rem' }}>
-                            <img src={logo} className="card-img-top" alt="..." />
-                            <div className="card-body">
-                                <h4 className="card-title">Category title</h4>
+                    {
+                        popularCategoryList.map((p) =>
+                            <div className='col-12 col-md-3 mb-4'>
+                                <div className="card shadow" style={{ width: '18rem' }}>
+                                    <img src={logo} className="card-img-top" alt="..." />
+                                    <div className="card-body">
+                                        <h4 className="card-title">{p.title}</h4>
+                                    </div>
+                                    <div className='card-footer'>
+                                        Product Downloads : {p.total_downloads}
+                                    </div>
+                                </div>
                             </div>
-                            <div className='card-footer'>
-                                Product Downloads : 2356
-                            </div>
-                        </div>
-                    </div>
-                    {/* Category box end */}
-                    {/* Category Box */}
-                    <div className='col-12 col-md-3 mb-4'>
-                        <div className="card shadow" style={{ width: '18rem' }}>
-                            <img src={logo} className="card-img-top" alt="..." />
-                            <div className="card-body">
-                                <h4 className="card-title">Category title</h4>
-                            </div>
-                            <div className='card-footer'>
-                                Product Downloads : 2356
-                            </div>
-                        </div>
-                    </div>
-                    {/* Category box end */}
-                    {/* Category Box */}
-                    <div className='col-12 col-md-3 mb-4'>
-                        <div className="card shadow" style={{ width: '18rem' }}>
-                            <img src={logo} className="card-img-top" alt="..." />
-                            <div className="card-body">
-                                <h4 className="card-title">Category title</h4>
-                            </div>
-                            <div className='card-footer'>
-                                Product Downloads : 2356
-                            </div>
-                        </div>
-                    </div>
-                    {/* Category box end */}
-                    {/* Category Box */}
-                    <div className='col-12 col-md-3 mb-4'>
-                        <div className="card shadow" style={{ width: '18rem' }}>
-                            <img src={logo} className="card-img-top" alt="..." />
-                            <div className="card-body">
-                                <h4 className="card-title">Category title</h4>
-                            </div>
-                            <div className='card-footer'>
-                                Product Downloads : 2356
-                            </div>
-                        </div>
-                    </div>
+                        )
+                    }
                     {/* Category box end */}
                 </div>
                 {/* End Popular Categories */}
 
                 {/* Popular Products */}
-                <h3 className='mb-4'>Popular Products <a href='#' className='float-end btn btn-dark'>View All Products <i class="fa-solid fa-arrow-right-long "></i></a></h3>
+                <h3 className='mb-4'>Popular Products <Link to='/products' className='float-end btn btn-dark'>View All Products <i class="fa-solid fa-arrow-right-long "></i></Link></h3>
                 <div className='row mb-4'>
-                    {/* Product Box */}
-                    <div className='col-12 col-md-3 mb-4'>
-                        <div className="card shadow" style={{ width: '18rem' }}>
-                            <img src={logo} className="card-img-top" alt="..." />
-                            <hr />
-                            <div className="card-body">
-                                <h4 className="card-title">Product title</h4>
-                                <h5 className="card-title text-muted">Price: <span>Rs. 500</span></h5>
-                            </div>
-                            <div className='card-footer'>
-                                <button title='Add to Cart' className='btn btn-success btn-sm'>
-                                    <i class="fa-solid fa-cart-plus"></i>
-                                </button>
-                                <button title='Add to WishList' className='btn btn-danger btn-sm ms-1'>
-                                    <i class="fa-solid fa-heart"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    {/* Product box end */}
-                    {/* Product Box */}
-                    <div className='col-12 col-md-3 mb-4'>
-                        <div className="card shadow" style={{ width: '18rem' }}>
-                            <img src={logo} className="card-img-top" alt="..." />
-                            <hr />
-                            <div className="card-body">
-                                <h4 className="card-title">Product title</h4>
-                                <h5 className="card-title text-muted">Price: <span>Rs. 500</span></h5>
-                            </div>
-                            <div className='card-footer'>
-                                <button title='Add to Cart' className='btn btn-success btn-sm'>
-                                    <i class="fa-solid fa-cart-plus"></i>
-                                </button>
-                                <button title='Add to WishList' className='btn btn-danger btn-sm ms-1'>
-                                    <i class="fa-solid fa-heart"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    {/* Product box end */}
-                    {/* Product Box */}
-                    <div className='col-12 col-md-3 mb-4'>
-                        <div className="card shadow" style={{ width: '18rem' }}>
-                            <img src={logo} className="card-img-top" alt="..." />
-                            <hr />
-                            <div className="card-body">
-                                <h4 className="card-title">Product title</h4>
-                                <h5 className="card-title text-muted">Price: <span>Rs. 500</span></h5>
-                            </div>
-                            <div className='card-footer'>
-                                <button title='Add to Cart' className='btn btn-success btn-sm'>
-                                    <i class="fa-solid fa-cart-plus"></i>
-                                </button>
-                                <button title='Add to WishList' className='btn btn-danger btn-sm ms-1'>
-                                    <i class="fa-solid fa-heart"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    {/* Product box end */}
-                    {/* Product Box */}
-                    <div className='col-12 col-md-3 mb-4'>
-                        <div className="card shadow" style={{ width: '18rem' }}>
-                            <img src={logo} className="card-img-top" alt="..." />
-                            <hr />
-                            <div className="card-body">
-                                <h4 className="card-title">Product title</h4>
-                                <h5 className="card-title text-muted">Price: <span>Rs. 500</span></h5>
-                            </div>
-                            <div className='card-footer'>
-                                <button title='Add to Cart' className='btn btn-success btn-sm'>
-                                    <i class="fa-solid fa-cart-plus"></i>
-                                </button>
-                                <button title='Add to WishList' className='btn btn-danger btn-sm ms-1'>
-                                    <i class="fa-solid fa-heart"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    {/* Product box end */}
+                    {
+                        popularProducts.map((p) => <SingleProduct product={p} />)
+                    }
                 </div>
                 {/* End Popular Products */}
 
                 {/* Popular Sellers */}
                 <h3 className='mb-4'>Popular Sellers <Link to='/sellers' className='float-end btn btn-dark'>View All Sellers <i class="fa-solid fa-arrow-right-long "></i></Link></h3>
                 <div className='row mb-4'>
-                    {/* Sellers Box */}
-                    <div className='col-12 col-md-3 mb-4'>
-                        <div className="card shadow" style={{ width: '18rem' }}>
-                            <img src={logo} className="card-img-top" alt="..." />
-                            <div className="card-body">
-                                <h4 className="card-title">Seller Names</h4>
-                            </div>
-                            <div className='card-footer'>
-                                Categories : <a href='#'>Python</a>,<a href='#'>Php</a>
-                            </div>
-                        </div>
-                    </div>
-                    {/* Sellers box end */}
-                    {/* Sellers Box */}
-                    <div className='col-12 col-md-3 mb-4'>
-                        <div className="card shadow" style={{ width: '18rem' }}>
-                            <img src={logo} className="card-img-top" alt="..." />
-                            <div className="card-body">
-                                <h4 className="card-title">Seller Names</h4>
-                            </div>
-                            <div className='card-footer'>
-                                Categories : <a href='#'>JavaScript</a>,<a href='#'>VueJS</a>
-                            </div>
-                        </div>
-                    </div>
-                    {/* Sellers box end */}
-                    {/* Sellers Box */}
-                    <div className='col-12 col-md-3 mb-4'>
-                        <div className="card shadow" style={{ width: '18rem' }}>
-                            <img src={logo} className="card-img-top" alt="..." />
-                            <div className="card-body">
-                                <h4 className="card-title">Seller Names</h4>
-                            </div>
-                            <div className='card-footer'>
-                                Categories : <a href='#'>ReactJS</a>,<a href='#'>AngularJS</a>
-                            </div>
-                        </div>
-                    </div>
-                    {/* Sellers box end */}
-                    {/* Sellers Box */}
-                    <div className='col-12 col-md-3 mb-4'>
-                        <div className="card shadow" style={{ width: '18rem' }}>
-                            <img src={logo} className="card-img-top" alt="..." />
-                            <div className="card-body">
-                                <h4 className="card-title">Seller Names</h4>
-                            </div>
-                            <div className='card-footer'>
-                                Categories : <a href='#'>WordPress</a>,<a href='#'>Shopify</a>
-                            </div>
-                        </div>
-                    </div>
-                    {/* Sellers box end */}
+                    {
+                        vendorList.map((vendor) => <SingleSeller seller={vendor} />)
+                    }
                 </div>
                 {/* End Popular Sellers */}
 
@@ -253,7 +123,7 @@ function Home() {
                 <div id="carouselExampleIndicators" className="carousel slide my-4 border bg-dark text-white p-5" data-bs-ride="true" data-bs-wrap="true">
                     <div className="carousel-indicators">
                         {
-                            reviewList.map((item, index) => { return <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to={`${index}`} className="active" aria-current="true" aria-label={`Slide ${index+1}`}></button> }
+                            reviewList.map((item, index) => { return <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to={`${index}`} className="active" aria-current="true" aria-label={`Slide ${index + 1}`}></button> }
                             )
                         }
                     </div>
