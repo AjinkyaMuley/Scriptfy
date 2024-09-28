@@ -1,11 +1,11 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import logo from '../logo.svg';
 import { useContext, useEffect, useState } from 'react';
 import { CurrencyContext, CartContext, UserContext } from '../Context';
 import axios from 'axios';
 
 function SingleRelatedProduct(props) {
-
+    const navigate = useNavigate()
     const product_id = props.product.id;
     const productData = props.product
     const baseUrl = 'http://127.0.0.1:8000/api'
@@ -151,12 +151,12 @@ function SingleRelatedProduct(props) {
 
     return (
             <div className="card" >
-                <Link to={`/product/${props.product.title}/${props.product.id}`}>
+                <Link to={`/product/${props.product.slug}/${props.product.id}`}>
                     <img src={props.product.image} style={imgStyle} className="card-img-top" alt="..." />
                 </Link>
                 <hr />
                 <div className="card-body">
-                    <h5 className="card-title"><Link to={`/product/${props.product.title}/${props.product.id}`}>{props.product.title}</Link></h5>
+                    <h5 className="card-title"><Link to={`/product/${props.product.slug}/${props.product.id}`}>{props.product.title}</Link></h5>
                     {
                         currencyData != 'usd' &&
                         <h5 className="card-title text-muted">Price: <span>Rs. {props.product.price}</span></h5>

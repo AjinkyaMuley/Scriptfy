@@ -26,11 +26,12 @@ function ProductDetail() {
 
     // console.log(userContext)
 
+
     useEffect(() => {
         fetchData(baseUrl + '/product/' + product_id);
         fetchRelatedData(baseUrl + '/related-products/' + product_id);
         checkProductInWishList(product_id)
-    }, []);
+    }, [product_slug, product_id]);
 
     function fetchData(baseUrl) {
         fetch(baseUrl)
