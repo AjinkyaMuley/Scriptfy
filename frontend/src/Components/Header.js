@@ -7,6 +7,9 @@ function Header() {
     const { cartData, setCartData } = useContext(CartContext);
 
     const check_vendor = localStorage.getItem('vendor_login')
+    const check_customer = localStorage.getItem('customer_login')
+
+    console.log(check_customer, check_vendor)
 
     const { currencyData, setCurrencyData } = useContext(CurrencyContext)
 
@@ -34,26 +37,29 @@ function Header() {
                             <li className="nav-item">
                                 <Link className="nav-link active" to="/categories">Categories</Link>
                             </li>
-                            <li className="nav-item dropdown">
+                            {(!check_vendor || check_vendor === null) && <li className="nav-item dropdown">
                                 <a className="nav-link active dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     My Account
                                 </a>
                                 <ul className="dropdown-menu">
-                                    {userContext != 'true' &&
-                                        <>
-                                            <li><Link to="/customer/register" className="dropdown-item">Register</Link></li>
-                                            <li><Link to="/customer/login" className="dropdown-item">Login</Link></li>
-                                        </>
-                                    }
-                                    {userContext == 'true' &&
-                                        <>
-                                            <li><Link to="/customer/dashboard" className="dropdown-item">Dashboard</Link></li>
-                                            <li><Link to="/customer/logout" className="dropdown-item">Logout</Link></li>
-                                        </>
-                                    }
+                                    <>
+                                        {userContext != 'true' &&
+                                            <>
+                                                <li><Link to="/customer/register" className="dropdown-item">Register</Link></li>
+                                                <li><Link to="/customer/login" className="dropdown-item">Login</Link></li>
+                                            </>
+                                        }
+                                        {userContext == 'true' &&
+                                            <>
+                                                <li><Link to="/customer/dashboard" className="dropdown-item">Dashboard</Link></li>
+                                                <li><Link to="/customer/logout" className="dropdown-item">Logout</Link></li>
+                                            </>
+                                        }
+                                    </>
                                 </ul>
                             </li>
-                            <li className="nav-item dropdown">
+                            }
+                            {(!check_customer || check_customer === null) && <li className="nav-item dropdown">
                                 <a className="nav-link active dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Vendor Panel
                                 </a>
@@ -73,7 +79,7 @@ function Header() {
                                         </>
                                     }
                                 </ul>
-                            </li>
+                            </li>}
                             <li className="nav-item">
                                 <Link className="nav-link active" to="/checkout">New Orders (4)</Link>
                             </li>

@@ -107,7 +107,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
     def __init__(self,*args,**kwargs):
         super(OrderSerializer,self).__init__(*args,**kwargs)
-        self.Meta.depth = 1
+        # self.Meta.depth = 1
 
 class OrderItemSerializer(serializers.ModelSerializer):
     order = serializers.PrimaryKeyRelatedField(queryset=models.Order.objects.all(), write_only=True)

@@ -61,7 +61,7 @@ function Checkout(props) {
                                                 <tr>
                                                     <td>{index + 1}</td>
                                                     <td>
-                                                        <Link to={'/'}>
+                                                        <Link to={`/product/${item.product.title}/${item.product.id}`}>
                                                             <img src={item.product.image} className="img-thumbnail" width={'80'} alt={item.product.title} /> {item.product.title}
                                                         </Link>
                                                     </td>

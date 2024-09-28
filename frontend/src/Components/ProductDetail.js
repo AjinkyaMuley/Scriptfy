@@ -1,4 +1,4 @@
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useContext, useEffect, useState } from 'react';
 import SingleRelatedProduct from './SingleRelatedProduct';
 import { UserContext, CartContext, CurrencyContext } from '../Context';
@@ -22,6 +22,7 @@ function ProductDetail() {
     const [productInWishlist, setProductInWishlist] = useState(false)
     const { currencyData } = useContext(CurrencyContext);
     const userContext = useContext(UserContext);
+    const navigate = useNavigate()
     // const [currency, setCurrency] = useState('inr')
 
     // console.log(userContext)
@@ -104,6 +105,11 @@ function ProductDetail() {
         // Update the button state
         setCartButtonClickedStatus(true);
     };
+
+    const buyNowButtonHandler = () => {
+        cartAddButtonHandler()
+        navigate('/checkout')
+    }
 
     function checkProductInWishList(product_id) {
         const customerID = localStorage.getItem('customer_id');
@@ -251,7 +257,7 @@ function ProductDetail() {
                                 <i className="fa-solid fa-cart-plus"></i> Delete from Cart
                             </button>
                         }
-                        <button title='Buy Now' className='btn btn-success ms-1'>
+                        <button onClick={buyNowButtonHandler} title='Buy Now' className='btn btn-success ms-1'>
                             <i className="fa-solid fa-bag-shopping"></i> Buy Now
                         </button>
                         {
